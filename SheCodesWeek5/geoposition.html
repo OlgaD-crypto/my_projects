@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SheCodes Plus</title>
+    <meta charset="UTF-8" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 0 20px;
+      }
+
+      h1 {
+        text-align: center;
+        font-weight: 900;
+        margin: 0;
+        font-size: 34px;
+        line-height: 48px;
+      }
+
+      h1 h2,
+      h3 {
+        color: #231d3c;
+      }
+
+      .logo {
+        display: block;
+        margin: 30px auto;
+        width: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JavaScript Geolocation API</h1>
+
+    <h3>JS Challenge 1</h3>
+    <p>Log your current latitude and longitude using the Geolocation API</p>
+
+    <h3>JS Challenge 2</h3>
+    <p>Log the current temperature where you are.</p>
+
+    <h3>JS Challenge 3</h3>
+    <p>Change the h1 of this page by the current temperature</p>
+
+    <script>
+      let apiKey = "7ed20b3871d9e4f3837ef60fa128bf28";
+      let apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=";
+
+      let lat, lon;
+      function handlePosition(position) {
+        console.log(position.coords.latitude);
+        console.log(position.coords.longitude);
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+        axios
+          .get(`${apiUrl}${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
+          .then(displayTemp);
+      }
+
+      // I wanted to know the city by the coordinates//
+      let geoURL =
+        "https://api.openweathermap.org/data/2.5/weather?lat=38.7022848&lon=-9.158655999&appid=";
+      let x = axios.get(`${geoURL}${apiKey}&units=metric`).then(displayTemp);
+      navigator.geolocation.getCurrentPosition(handlePosition);
+      // end of //
+      function displayTemp(response) {
+        console.log(response);
+        let temperature = Math.round(response.data.main.temp);
+        console.log(temperature);
+        let place = response.data.name;
+        console.log(place);
+        let city = document.querySelector("h1");
+        city.innerHTML = `It is ${temperature} degrees in ${place}`;
+      }
+    </script>
+  </body>
+</html>
