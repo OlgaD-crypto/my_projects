@@ -25,3 +25,9 @@ h3 {
   color: white;
   cursor: pointer;
 }
+
+span {
+  display: block;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  margin-left: 3rem;
+}
