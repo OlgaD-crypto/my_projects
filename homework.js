@@ -40,8 +40,8 @@ citySearch1.addEventListener("click", searching);
 
 // searching current position
 
-let searchPosition = document.querySelector("#location");
-searchPosition.addEventListener("click", getPosition);
+// let searchPosition = document.querySelector("#location");
+// searchPosition.addEventListener("click", getPosition);
 
 function getPosition() {
   navigator.geolocation.getCurrentPosition(currentPosition);
@@ -55,22 +55,50 @@ function currentPosition(position) {
     .then(displayTemp);
 }
 
+const rad = document.querySelectorAll('input[type="radio"]');
+
+for (const radio of rad) {
+  radio.addEventListener("change", check);
+}
+
+let celsiusTemperature;
+let tempNew = document.querySelector("#temper");
+
 function displayTemp(response) {
-  let temperature = Math.round(response.data.main.temp);
-  let tempNew = document.querySelector("#temper");
-  tempNew.innerHTML = `${temperature}°`;
-  let wind = response.data.wind.speed;
+  let icon = response.data.weather[0].icon;
+  let newIcon = document.querySelector("#icon");
+  newIcon.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${icon}@2x.png`
+  );
+  let description = response.data.weather[0].description;
+  let newDescription = document.querySelector("#description");
+  newDescription.innerHTML = description;
+
+  let wind = Math.round(response.data.wind.speed);
   let windNew = document.querySelector("#wind");
   windNew.innerHTML = `${wind} km/h`;
   let humidity = response.data.main.humidity;
   let newHumidity = document.querySelector("#humidity");
-  newHumidity.innerHTML = `Humidity ${humidity} %`;
+  newHumidity.innerHTML = `Humidity: ${humidity} %`;
   let city = response.data.name;
   let country = response.data.sys.country;
   let currentCity = document.querySelector("#city");
   let currentCountry = document.querySelector("#country");
   currentCity.innerHTML = `${city}`;
   currentCountry.innerHTML = `${country}`;
+  celsiusTemperature = Math.round(response.data.main.temp);
+  let temperature = `${celsiusTemperature}`;
+  tempNew = document.querySelector("#temper");
+  tempNew.innerHTML = `${temperature}°C`;
 }
 
-search("Paris");
+function check() {
+  if (rad[0].checked) {
+    let tempFahr = Math.round((9 / 5) * celsiusTemperature + 32);
+    tempNew.innerHTML = `${tempFahr}°F`;
+  } else tempNew.innerHTML = `${celsiusTemperature}°C`;
+}
+
+getPosition();
+// search("Paris");

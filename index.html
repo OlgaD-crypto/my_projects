@@ -47,7 +47,30 @@
               </svg>
             </button>
 
-            <button type="button" id="location">Get current location</button>
+            <!-- <button type="button" id="location">Get current location</button> -->
+          </div>
+        </div>
+        <div class="col-1 mx-5">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="fahrenheit"
+              name="flexRadioDefault"
+              id="flexRadioDefault1"
+            />
+            <label class="form-check-label" for="flexRadioDefault1"> F° </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="celsius"
+              name="flexRadioDefault"
+              id="flexRadioDefault2"
+              checked
+            />
+            <label class="form-check-label" for="flexRadioDefault2"> C° </label>
           </div>
         </div>
       </div>
@@ -55,17 +78,17 @@
         <div class="container">
           <div class="row">
             <div class="col-5" name="temp-today">
-              <div></div>
-              <div id="temper">10° / 25°</div>
-              <div id="wind">10 km/h</div>
-              <div id="humidity">Humidity</div>
+              <div id="temper"></div>
+              <div id="wind"></div>
+              <div id="humidity"></div>
+              <div id="description"></div>
             </div>
-            <div class="col-1"><br /><br /></div>
+            <div class="col-1"><img id="icon" src="" /></div>
             <div class="col-2">
-              <div id="city">Odessa</div>
-              <div id="country">Ukraine</div>
-              <div id="date">19.06.2022</div>
-              <div id="today">Sunday</div>
+              <div id="city"></div>
+              <div id="country"></div>
+              <div id="date"></div>
+              <div id="today"></div>
             </div>
           </div>
         </div>
