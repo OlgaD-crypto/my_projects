@@ -61,10 +61,18 @@ for (const radio of rad) {
   radio.addEventListener("change", check);
 }
 
+function check() {
+  if (rad[0].checked) {
+    let tempFahr = Math.round((9 / 5) * celsiusTemperature + 32);
+    tempNew.innerHTML = `${tempFahr}°F`;
+  } else tempNew.innerHTML = `${celsiusTemperature}°C`;
+}
+
 let celsiusTemperature;
 let tempNew = document.querySelector("#temper");
 
 function displayTemp(response) {
+  check();
   let icon = response.data.weather[0].icon;
   let newIcon = document.querySelector("#icon");
   newIcon.setAttribute(
@@ -90,14 +98,8 @@ function displayTemp(response) {
   celsiusTemperature = Math.round(response.data.main.temp);
   let temperature = `${celsiusTemperature}`;
   tempNew = document.querySelector("#temper");
-  tempNew.innerHTML = `${temperature}°C`;
-}
-
-function check() {
-  if (rad[0].checked) {
-    let tempFahr = Math.round((9 / 5) * celsiusTemperature + 32);
-    tempNew.innerHTML = `${tempFahr}°F`;
-  } else tempNew.innerHTML = `${celsiusTemperature}°C`;
+  // tempNew.innerHTML = `${temperature}°C`;
+  check();
 }
 
 getPosition();
