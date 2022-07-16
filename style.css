@@ -47,10 +47,16 @@ span {
   text-transform: capitalize;
 }
 
-#humidity {
-  font-size: 23px;
-}
-
+#humidity,
 #description {
   font-size: 23px;
+}
+#wind-f {
+  font-size: 15px;
+}
+
+#forecast {
+  margin-top: 60px;
+  font-size: 18px;
+  color: rgb(33, 33, 33);
 }
