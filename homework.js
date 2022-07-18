@@ -23,6 +23,21 @@ function search(city) {
   axios
     .get(`${apiUrl}q=${city}&appid=${apiKey}&units=metric`)
     .then(displayTemp);
+
+  axios.get(`${apiUrl}q=${city}&appid=${apiKey}&units=metric`).then(coordCity);
+}
+
+function coordCity(res) {
+  console.log(res);
+  let latCity = res.data.coord.lat;
+  let lonCity = res.data.coord.lon;
+
+  console.log(`lat${latCity}`);
+  axios
+    .get(
+      `${apiUrlForecast}lat=${latCity}&lon=${lonCity}&exclude=minutely,hourly,alerts&appid=${apiKey}&units=metric`
+    )
+    .then(displayForecast);
 }
 
 function searching(event) {
@@ -79,6 +94,7 @@ let tempNew = document.querySelector("#temper");
 
 function displayTemp(response) {
   check();
+  console.log(response.data.coord.lat);
   let icon = response.data.weather[0].icon;
   let newIcon = document.querySelector("#icon");
   newIcon.setAttribute(
@@ -116,27 +132,29 @@ function searchDay(timestamp) {
   forecastDates = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   return forecastDates[day];
 }
-let newDay = document.querySelector("#forecast");
 
 function displayForecast(response) {
   console.log(response);
+  let newDay = document.querySelector("#forecast");
+  let forecastHTML = `<div class="row">`;
   let days = response.data.daily;
   days.forEach(function (day, index) {
     if (index < 5) {
       let tempMax = Math.round(day.temp.max);
       let tempMin = Math.round(day.temp.min);
-      newDay.innerHTML += `<div class="col">
+      forecastHTML += `<div class="col">
           <div id="day">${searchDay(day.dt)}</div>
           <img id="icon-f" src="http://openweathermap.org/img/wn/${
             day.weather[0].icon
           }@2x.png" />
           <div id="temp-f">${tempMax}° | ${tempMin}°</div>
           <div id="wind-f">Wind: ${day.wind_speed} km/h </div>
-          </div>
+          
   `;
     }
-
+    forecastHTML = forecastHTML + `</div>`;
     return newDay;
   });
-  newDay += "</div>";
+
+  newDay.innerHTML = forecastHTML;
 }
