@@ -27,12 +27,10 @@ function search(city) {
   axios.get(`${apiUrl}q=${city}&appid=${apiKey}&units=metric`).then(coordCity);
 }
 
+// searching for the citie's coord
 function coordCity(res) {
-  console.log(res);
   let latCity = res.data.coord.lat;
   let lonCity = res.data.coord.lon;
-
-  console.log(`lat${latCity}`);
   axios
     .get(
       `${apiUrlForecast}lat=${latCity}&lon=${lonCity}&exclude=minutely,hourly,alerts&appid=${apiKey}&units=metric`
@@ -84,17 +82,15 @@ for (const radio of rad) {
 
 function check() {
   if (rad[0].checked) {
-    let tempFahr = Math.round((9 / 5) * celsiusTemperature + 32);
+    tempFahr = Math.round((9 / 5) * celsiusTemperature + 32);
     tempNew.innerHTML = `${tempFahr}°F`;
   } else tempNew.innerHTML = `${celsiusTemperature}°C`;
 }
 
-let celsiusTemperature;
+let celsiusTemperature, temperature;
 let tempNew = document.querySelector("#temper");
 
 function displayTemp(response) {
-  check();
-  console.log(response.data.coord.lat);
   let icon = response.data.weather[0].icon;
   let newIcon = document.querySelector("#icon");
   newIcon.setAttribute(
@@ -118,9 +114,6 @@ function displayTemp(response) {
   currentCity.innerHTML = `${city}`;
   currentCountry.innerHTML = `${country}`;
   celsiusTemperature = Math.round(response.data.main.temp);
-  let temperature = `${celsiusTemperature}`;
-  tempNew = document.querySelector("#temper");
-  // tempNew.innerHTML = `${temperature}°C`;
   check();
 }
 
@@ -134,7 +127,6 @@ function searchDay(timestamp) {
 }
 
 function displayForecast(response) {
-  console.log(response);
   let newDay = document.querySelector("#forecast");
   let forecastHTML = `<div class="row">`;
   let days = response.data.daily;
@@ -142,6 +134,7 @@ function displayForecast(response) {
     if (index < 5) {
       let tempMax = Math.round(day.temp.max);
       let tempMin = Math.round(day.temp.min);
+
       forecastHTML += `<div class="col">
           <div id="day">${searchDay(day.dt)}</div>
           <img id="icon-f" src="http://openweathermap.org/img/wn/${
