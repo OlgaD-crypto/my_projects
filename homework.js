@@ -19,12 +19,16 @@ let apiKey = "7ed20b3871d9e4f3837ef60fa128bf28";
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
 let apiUrlForecast = "https://api.openweathermap.org/data/2.5/onecall?";
 
+let units = "metric";
+
 function search(city) {
   axios
-    .get(`${apiUrl}q=${city}&appid=${apiKey}&units=metric`)
+    .get(`${apiUrl}q=${city}&appid=${apiKey}&units=${units}`)
     .then(displayTemp);
 
-  axios.get(`${apiUrl}q=${city}&appid=${apiKey}&units=metric`).then(coordCity);
+  axios
+    .get(`${apiUrl}q=${city}&appid=${apiKey}&units=${units}`)
+    .then(coordCity);
 }
 
 // searching for the citie's coord
@@ -33,16 +37,14 @@ function coordCity(res) {
   let lonCity = res.data.coord.lon;
   axios
     .get(
-      `${apiUrlForecast}lat=${latCity}&lon=${lonCity}&exclude=minutely,hourly,alerts&appid=${apiKey}&units=metric`
+      `${apiUrlForecast}lat=${latCity}&lon=${lonCity}&exclude=minutely,hourly,alerts&appid=${apiKey}&units=${units}`
     )
     .then(displayForecast);
 }
 
 function searching(event) {
   event.preventDefault();
-  let city = document.querySelector("#city-to-search").value;
-  let newCity = document.querySelector("#city");
-  newCity.innerHTML = `${city}`;
+  city = document.querySelector("#city-to-search").value;
   search(city);
 }
 
@@ -52,10 +54,28 @@ citySearch.addEventListener("search", searching);
 let citySearch1 = document.getElementById("button-search");
 citySearch1.addEventListener("click", searching);
 
-// searching current position
+const rad = document.querySelectorAll('input[type="radio"]');
 
-// let searchPosition = document.querySelector("#location");
-// searchPosition.addEventListener("click", getPosition);
+for (const radio of rad) {
+  radio.addEventListener("change", check);
+
+  function check(event) {
+    let target = event.target;
+
+    switch (target.id) {
+      case "fahrenheit":
+        units = "imperial";
+        search(city);
+
+        break;
+      case "celsius":
+        units = "metric";
+        search(city);
+
+        break;
+    }
+  }
+}
 
 function getPosition() {
   navigator.geolocation.getCurrentPosition(currentPosition);
@@ -65,30 +85,14 @@ function currentPosition(position) {
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
   axios
-    .get(`${apiUrl}lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
+    .get(`${apiUrl}lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`)
     .then(displayTemp);
   axios
     .get(
-      `${apiUrlForecast}lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=${apiKey}&units=metric`
+      `${apiUrlForecast}lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=${apiKey}&units=${units}`
     )
     .then(displayForecast);
 }
-
-const rad = document.querySelectorAll('input[type="radio"]');
-
-for (const radio of rad) {
-  radio.addEventListener("change", check);
-}
-
-function check() {
-  if (rad[0].checked) {
-    tempFahr = Math.round((9 / 5) * celsiusTemperature + 32);
-    tempNew.innerHTML = `${tempFahr}°F`;
-  } else tempNew.innerHTML = `${celsiusTemperature}°C`;
-}
-
-let celsiusTemperature, temperature;
-let tempNew = document.querySelector("#temper");
 
 function displayTemp(response) {
   let icon = response.data.weather[0].icon;
@@ -107,13 +111,18 @@ function displayTemp(response) {
   let humidity = response.data.main.humidity;
   let newHumidity = document.querySelector("#humidity");
   newHumidity.innerHTML = `Humidity: ${humidity} %`;
-  let city = response.data.name;
+  city = response.data.name;
+  let newCity = document.querySelector("#city");
+  newCity.innerHTML = `${city}`;
   let country = response.data.sys.country;
   let currentCity = document.querySelector("#city");
   let currentCountry = document.querySelector("#country");
   currentCity.innerHTML = `${city}`;
   currentCountry.innerHTML = `${country}`;
-  celsiusTemperature = Math.round(response.data.main.temp);
+  let temperature = Math.round(response.data.main.temp);
+  let tempNew = document.querySelector("#temper");
+  tempNew.innerHTML = `${temperature}°`;
+
   check();
 }
 
