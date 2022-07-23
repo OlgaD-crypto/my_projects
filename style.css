@@ -4,7 +4,7 @@ body {
   margin-left: 40 px;
 }
 h3 {
-  padding-bottom: 30px;
+  padding-bottom: auto;
 }
 .row {
   display: block;
